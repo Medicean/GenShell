@@ -1,0 +1,18 @@
+{
+    "name": "生成 Shell",
+    "name_en": "GenShell",
+    "main": "index.js",
+    "icon": "random",
+    "version": "0.1",
+    "description": "生成 Shell",
+    "description_en": "generate shell",
+    "author": {
+      "name": "Medici.Yan",
+      "email": "Medici.Yan@gmail.com"
+    },
+    "category": "",
+    "category_en": "",
+    "multiple": false,
+    "scripts": ["php","asp","aspx","custom"]
+  }
+  
