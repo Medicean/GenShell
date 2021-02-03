@@ -7,7 +7,8 @@ module.exports = {
     toolbar: {
         new: "生成",
         clear: "清空",
-        copy: "复制"
+        copy: "复制",
+        refresh: "重新生成"
     },
     pwd_hint: "使用时请删除此行, 连接密码",
     message: {

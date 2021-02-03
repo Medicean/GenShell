@@ -7,7 +7,8 @@ module.exports = {
     toolbar: {
         new: "Generate",
         clear: "Clear",
-        copy: "Copy"
+        copy: "Copy",
+        refresh: "ReGenerate"
     },
     pwd_hint: "Delete this line, pwd",
     message: {

