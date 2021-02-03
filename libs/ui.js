@@ -46,6 +46,8 @@ class UI {
         { id: 'asp',  icon: 'file-code-o', type: 'button', text: "ASP", enabled: false, }, // 暂不支持  asp aspx
         { id: 'aspx', icon: 'file-code-o', type: 'button', text: "ASPX", enabled: false, },
         { id: 'php',  icon: 'file-code-o', type: 'button', text: "PHP"},
+        { id: 'jsp',  icon: 'file-code-o', type: 'button', text: "JSP"},
+        { id: 'jspx',  icon: 'file-code-o', type: 'button', text: "JSPX"},
       ]},
       { id: 'copy', type: 'button', text: LANG['toolbar']['copy'], icon: 'copy' },
       { id: 'clear', type: 'button', text: LANG['toolbar']['clear'], icon: 'remove' }
@@ -113,6 +115,48 @@ class UI {
             if(data){
               self.editor.session.setMode(`ace/mode/php`);
               self.editor.session.setValue(`<?php // ${LANG['pwd_hint']}: ${value} ?>\n${data}`);
+              toastr.success(LANG["message"]["gen_success"], LANG_T['success']);
+            }
+          });
+        });
+        break
+      case "jsp":
+        layer.prompt({
+          value: "antsword",
+          title: `<i class="fa fa-file-code-o"></i> ${LANG["prompt"]["create_pwd"]}`
+        },(value, i, e) => {
+          layer.close(i);
+          if(value === "antsword"){
+            value = self._randomStr(8);
+          }
+          callback({
+            type: "jsp",
+            pwd: value,
+          }).then((data) => {
+            if(data){
+              self.editor.session.setMode(`ace/mode/jsp`);
+              self.editor.session.setValue(data);
+              toastr.success(LANG["message"]["gen_success"], LANG_T['success']);
+            }
+          });
+        });
+        break
+      case "jspx":
+        layer.prompt({
+          value: "antsword",
+          title: `<i class="fa fa-file-code-o"></i> ${LANG["prompt"]["create_pwd"]}`
+        },(value, i, e) => {
+          layer.close(i);
+          if(value === "antsword"){
+            value = self._randomStr(8);
+          }
+          callback({
+            type: "jspx",
+            pwd: value,
+          }).then((data) => {
+            if(data){
+              self.editor.session.setMode(`ace/mode/jsp`);
+              self.editor.session.setValue(data);
               toastr.success(LANG["message"]["gen_success"], LANG_T['success']);
             }
           });

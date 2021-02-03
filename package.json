@@ -13,6 +13,6 @@
     "category": "",
     "category_en": "",
     "multiple": false,
-    "scripts": ["php","asp","aspx","custom"]
+    "scripts": ["*"]
   }
   
