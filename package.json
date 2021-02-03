@@ -3,9 +3,9 @@
     "name_en": "GenShell",
     "main": "index.js",
     "icon": "random",
-    "version": "0.1",
+    "version": "0.2",
     "description": "生成 Shell",
-    "description_en": "generate shell",
+    "description_en": "generate antsword shell",
     "author": {
       "name": "Medici.Yan",
       "email": "Medici.Yan@gmail.com"
