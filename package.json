@@ -3,7 +3,7 @@
     "name_en": "GenShell",
     "main": "index.js",
     "icon": "random",
-    "version": "0.3",
+    "version": "0.4",
     "description": "生成 Shell",
     "description_en": "generate antsword shell",
     "author": {
