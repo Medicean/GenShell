@@ -54,6 +54,8 @@ class UI {
         { id: 'php',  icon: 'file-code-o', type: 'button', text: "PHP"},
         { id: 'jsp',  icon: 'file-code-o', type: 'button', text: "JSP"},
         { id: 'jspx',  icon: 'file-code-o', type: 'button', text: "JSPX"},
+        { id: 'jspjs',  icon: 'file-code-o', type: 'button', text: "JSPJS"},
+        { id: 'jspxjs',  icon: 'file-code-o', type: 'button', text: "JSPXJS"},
       ]},
       { id: 'copy', type: 'button', text: LANG['toolbar']['copy'], icon: 'copy' },
       { id: 'refresh', type: 'button', text: LANG['toolbar']['refresh'], icon: 'refresh', disabled: true },
@@ -185,6 +187,7 @@ class UI {
         });
         break
       case "jsp":
+      case "jspjs":
         layer.prompt({
           value: "antsword",
           title: `<i class="fa fa-file-code-o"></i> ${LANG["prompt"]["create_pwd"]}`
@@ -194,13 +197,13 @@ class UI {
             value = self._randomStr(8);
           }
           callback({
-            type: "jsp",
+            type: id,
             pwd: value,
           }).then((data) => {
             if(data){
               self.toolbar.enableItem('refresh');
               self.config.pwd = value;
-              self.config.type = "jsp";
+              self.config.type = id;
               self.config.highlight = "ace/mode/jsp";
               self.config.pwdhint = `<%-- ${LANG['pwd_hint']}: ${value} --%>`;
               self.editor.session.setMode(self.config.highlight);
@@ -211,6 +214,7 @@ class UI {
         });
         break
       case "jspx":
+      case "jspxjs":
         layer.prompt({
           value: "antsword",
           title: `<i class="fa fa-file-code-o"></i> ${LANG["prompt"]["create_pwd"]}`
@@ -220,13 +224,13 @@ class UI {
             value = self._randomStr(8);
           }
           callback({
-            type: "jspx",
+            type: id,
             pwd: value,
           }).then((data) => {
             if(data){
               self.toolbar.enableItem('refresh');
               self.config.pwd = value;
-              self.config.type = "jspx";
+              self.config.type = id;
               self.config.highlight = "ace/mode/jsp";
               self.config.pwdhint = `<!-- ${LANG['pwd_hint']}: ${value} -->`;
               self.editor.session.setMode(self.config.highlight);
