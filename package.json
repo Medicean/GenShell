@@ -1,18 +1,17 @@
 {
-    "name": "生成 Shell",
-    "name_en": "GenShell",
-    "main": "index.js",
-    "icon": "random",
-    "version": "0.5",
-    "description": "生成 Shell",
-    "description_en": "generate antsword shell",
-    "author": {
-      "name": "Medici.Yan",
-      "email": "Medici.Yan@gmail.com"
-    },
-    "category": "",
-    "category_en": "",
-    "multiple": false,
-    "scripts": ["*", "php", "asp", "aspx", "jsp", "custom", "php4", "jspjs"]
-  }
-  
+  "name": "生成 Shell",
+  "name_en": "GenShell",
+  "main": "index.js",
+  "icon": "random",
+  "version": "0.6",
+  "description": "生成 Shell",
+  "description_en": "generate antsword shell",
+  "author": {
+    "name": "Medici.Yan",
+    "email": "Medici.Yan@gmail.com"
+  },
+  "category": "",
+  "category_en": "",
+  "multiple": false,
+  "scripts": ["*", "php", "asp", "aspx", "jsp", "custom", "php4", "jspjs"]
+}
